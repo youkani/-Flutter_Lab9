@@ -1,18 +1,26 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class SlotMachine extends StatefulWidget {
   const SlotMachine({super.key});
 
   @override
-  State<SlotMachine> createState() => _SlotMachineState();
+  State<SlotMachine> createState() =>
+      _SlotMachineState();
 }
 
-class _SlotMachineState extends State<SlotMachine> {
-  static const _cherry = 'assets/images/cherry.png';
+class _SlotMachineState
+    extends State<SlotMachine> {
+  static const _cherry =
+      'assets/images/cherry.png';
   static const _lemon = 'assets/images/lemon.png';
   static const _seven = 'assets/images/seven.png';
-  static const _symbols = [_cherry, _lemon, _seven];
+  static const _symbols = [
+    _cherry,
+    _lemon,
+    _seven,
+  ];
 
   final _random = Random();
 
@@ -23,17 +31,34 @@ class _SlotMachineState extends State<SlotMachine> {
   var _message = '';
 
   void _spin() {
+    if (_coins <= 0) {
+      setState(() {
+        _message = 'Монеты закончились! 😢';
+      });
+      return;
+    }
     setState(() {
-      _slot1 = _symbols[_random.nextInt(_symbols.length)];
-      _slot2 = _symbols[_random.nextInt(_symbols.length)];
-      _slot3 = _symbols[_random.nextInt(_symbols.length)];
+      _slot1 =
+          _symbols[_random.nextInt(
+            _symbols.length,
+          )];
+      _slot2 =
+          _symbols[_random.nextInt(
+            _symbols.length,
+          )];
+      _slot3 =
+          _symbols[_random.nextInt(
+            _symbols.length,
+          )];
 
       if (_slot1 == _slot2 && _slot2 == _slot3) {
         _coins += 3;
         _message = 'Победа! 🎉 +3 монеты';
       } else {
         _coins -= 1;
-        _message = 'Попробуй ещё раз 😔 -1 монета';
+        _message = _coins == 0
+            ? 'Монеты закончились! 😢'
+            : 'Попробуй ещё раз 😔 -1 монета';
       }
     });
   }
@@ -57,11 +82,23 @@ class _SlotMachineState extends State<SlotMachine> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(_slot1, width: 100, height: 100),
+              Image.asset(
+                _slot1,
+                width: 100,
+                height: 100,
+              ),
               const SizedBox(width: 16),
-              Image.asset(_slot2, width: 100, height: 100),
+              Image.asset(
+                _slot2,
+                width: 100,
+                height: 100,
+              ),
               const SizedBox(width: 16),
-              Image.asset(_slot3, width: 100, height: 100),
+              Image.asset(
+                _slot3,
+                width: 100,
+                height: 100,
+              ),
             ],
           ),
         ),
@@ -76,7 +113,7 @@ class _SlotMachineState extends State<SlotMachine> {
         ),
         const SizedBox(height: 40),
         ElevatedButton(
-          onPressed: _spin,
+          onPressed: _coins > 0 ? _spin : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.amber,
             padding: const EdgeInsets.symmetric(
@@ -93,7 +130,28 @@ class _SlotMachineState extends State<SlotMachine> {
             ),
           ),
         ),
+        const SizedBox(height: 12),
+        TextButton(
+          onPressed: _reset,
+          child: const Text(
+            'Начать заново',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+            ),
+          ),
+        ),
       ],
     );
+  }
+
+  void _reset() {
+    setState(() {
+      _coins = 10;
+      _slot1 = _cherry;
+      _slot2 = _lemon;
+      _slot3 = _seven;
+      _message = '';
+    });
   }
 }
