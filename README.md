@@ -16,7 +16,6 @@
 ![Игровой экран](img/step4_bunicheva_shkurskii.png)
 
 ## Как запустить проект:
-## Запуск
 1. `git clone https://github.com/youkani/Flutter_Lab9.git`
 2. `cd Flutter_Lab9`
 3. `code .`
